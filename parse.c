@@ -119,7 +119,6 @@ void parseInput(char *buf){
     int cnt = 0; 
     while (pch != NULL){
         if (cnt==3){
-            free(pch);
             perror("Too much values");
             free(tokens);
             return;
@@ -127,8 +126,11 @@ void parseInput(char *buf){
         tokens[cnt++] = pch;
         pch = strtok(NULL, " ");
     }
-    free(pch);
+    //free(pch);
+    if (cnt > 3){
+        perror("Too much values");
 
+    }
     switch (cnt)
     {
     Number N, n1, n2;
@@ -158,7 +160,7 @@ void parseInput(char *buf){
         
     case 2:
         if (tokens[0][0] != '~'){
-            fprintf(stderr, "unknown uno operator %c", tokens[0][0]);
+            fprintf(stderr, "Not enough values");
             goto End;
         }
         op = getOperator(tokens[0]);
@@ -185,7 +187,12 @@ void parseInput(char *buf){
         if (op == '0'){
             goto End;
         }
+        
         if (isValid(tokens[0] , getSystem(tokens[0])) && isValid(tokens[2] , getSystem(tokens[2]))){
+            if (op == '~'){
+                perror("Too much values for ~ operation");
+                goto End;
+            }
             tokens[0][strlen(tokens[0])] = '\0';
             tokens[2][strlen(tokens[2])] = '\0';
             n1 = parseNum(tokens[0]);
@@ -212,7 +219,6 @@ void parseInput(char *buf){
     }
     goto End;
     End:
-        
         free(tokens);
         return;
 }
