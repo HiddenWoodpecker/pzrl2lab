@@ -111,6 +111,7 @@ void printResult(Number n){
 }
 
 void parseInput(char *buf){
+
     char **tokens = malloc(3*sizeof(char*));
     tokens[0] = NULL;
     tokens[1] = NULL;
@@ -120,8 +121,7 @@ void parseInput(char *buf){
     while (pch != NULL){
         if (cnt==3){
             perror("Too much values");
-            free(tokens);
-            return;
+            goto End;
         }
         tokens[cnt++] = pch;
         pch = strtok(NULL, " ");
@@ -129,7 +129,11 @@ void parseInput(char *buf){
     //free(pch);
     if (cnt > 3){
         perror("Too much values");
-
+        goto End;
+    }
+    if (cnt == 0){
+        perror("Empty string");
+        goto End;
     }
     switch (cnt)
     {
