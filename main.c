@@ -7,7 +7,6 @@
 #include "parse.h"
 
 int main(int argc, char const *argv[]){
-    char test[128] = "0x123 + 0x1\0";
    
     int bufsize = 128;
     char* buf = malloc(bufsize*sizeof(char));
@@ -26,12 +25,8 @@ int main(int argc, char const *argv[]){
         }
         buf[len++] = c;
     }
-    printf("%d len\n", len);
     buf[len++] = '\0';
-    printf("buf = %s len = %d strlen = %d\n", buf, len, strlen(buf));
-
     parseInput(buf);
-
     free(buf);
     return 0;
 }
