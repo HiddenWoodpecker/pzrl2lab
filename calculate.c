@@ -1,7 +1,8 @@
 #include "parse.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-int calcUnoOperation(char operation, int i1){
+LL calcUnoOperation(char operation, LL i1){
     if (operation != '~'){
         perror("Неизвестная унарная операция");
         return -1;
@@ -9,7 +10,7 @@ int calcUnoOperation(char operation, int i1){
     return ~i1;
 }
 
-int calcBinOperation(char operation, int i1, int i2){
+LL calcBinOperation(char operation, LL i1, LL i2){
     switch (operation){
         case '+':
             
