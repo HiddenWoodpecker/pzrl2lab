@@ -329,6 +329,7 @@ char itoc(int i, enum numSystem Sys){
     case OCT:
         return (char)(i+48);
     default:
+        return -1;
     }
     perror("Неизвестная система исчисления");
     return -1;
