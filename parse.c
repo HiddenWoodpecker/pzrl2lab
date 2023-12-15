@@ -86,6 +86,9 @@ enum numSystem getSystem(char *num){
     if (num == NULL){
         perror("NULL string");
     }
+    if (strlen(num) == 1 && num[0] == '0'){
+        return BIN;
+    }
     if (num[0] == '-'){
         offset = 1;
     }
