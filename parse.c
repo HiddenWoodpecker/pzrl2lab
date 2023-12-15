@@ -126,11 +126,6 @@ void parseInput(char *buf){
         tokens[cnt++] = pch;
         pch = strtok(NULL, " ");
     }
-    //free(pch);
-    if (cnt > 3){
-        perror("Too much values");
-        goto End;
-    }
     if (cnt == 0){
         perror("Empty string");
         goto End;
@@ -141,6 +136,7 @@ void parseInput(char *buf){
     LL i1;
     char op;
     case 1:
+
         if (tokens[0][0] != '~'){
             fprintf(stderr, "Not enough values");
             goto End;
@@ -149,10 +145,10 @@ void parseInput(char *buf){
         if (op == '0'){
             goto End;
         }
+
         if (isValid(tokens[0] + 1 , getSystem(tokens[0] + 1) )){
             n1 = parseNum(tokens[0] + 1);
             i1 = calcUnoOperation(op, n1.iNum);
-            
             N.iNum = i1;
             N.nSys = n1.nSys;
             N.sign = (i1 < 0) ? -1: 1;
@@ -160,9 +156,12 @@ void parseInput(char *buf){
             printResult(N);
             goto End;
             }
-        goto End;
-        
+    
     case 2:
+        perror("Invalid number of arguments");
+        goto End;
+
+        /*
         if (tokens[0][0] != '~'){
             fprintf(stderr, "Not enough values");
             goto End;
@@ -185,7 +184,7 @@ void parseInput(char *buf){
             goto End;
             }
         goto End;
-    
+    */
     case 3:
         op = getOperator(tokens[1]);
         if (op == '0'){
@@ -221,7 +220,7 @@ void parseInput(char *buf){
     default:
         goto End;
     }
-    goto End;
+
     End:
         free(tokens);
         return;
