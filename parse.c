@@ -18,6 +18,27 @@ char getOperator(char *str){
     perror("No valid operator");
     return '0';
 }
+bool isBitOp(char op){
+    char bitOps[] = {'&', '|', '^'};
+    for (size_t i = 0; i < 3; i++){
+        if (bitOps[i] == op) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool validateOp(char op, LL i1, LL i2){
+    if (isBitOp(op) && ((i1 < 0) || (i2 < 0))){
+        perror("Both numbers should be non negative");
+        return false;
+    }
+    if (op == '%' && (i2 == 0)){
+        perror("Division by zero");
+        return false;
+    }
+    return true;
+}
 
 bool isValid(char *str, enum numSystem SYS){
     if (SYS == UNKNOWN){
@@ -131,7 +152,7 @@ void parseInput(char *buf){
         perror("Empty string");
         goto End;
     }
-    
+
     switch (cnt){
     
         Number N, n1, n2;
@@ -213,13 +234,14 @@ void parseInput(char *buf){
                     perror("Differnt num systems");
                     goto End;
                 }
-
-                i1 = calcBinOperation(op, n1.iNum, n2.iNum);
-                N.iNum = abs(i1);
-                N.nSys = n1.nSys;
-                N.sign = (i1 < 0) ? -1: 1;
-                itos(i1, N.nSys, N.num);
-                printResult(N);
+                if (validateOp(op, n1.iNum, n2.iNum)){
+                    i1 = calcBinOperation(op, n1.iNum, n2.iNum);
+                    N.iNum = abs(i1);
+                    N.nSys = n1.nSys;
+                    N.sign = (i1 < 0) ? -1: 1;
+                    itos(i1, N.nSys, N.num);
+                    printResult(N);
+                }
                 goto End;
             }
             

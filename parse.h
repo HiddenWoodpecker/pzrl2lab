@@ -20,7 +20,9 @@ typedef struct Number{
 void printResult(Number n);
 void reverseStr(char *str);
 char getOperator(char *str);
+bool isBitOp(char op);
 void parseInput(char *buf);
+bool validateOp(char op, LL i1, LL i2);
 Number parseNum(char *str);
 bool isValid(char *str, enum numSystem SYS);
 enum numSystem getSystem(char *num);
