@@ -20,28 +20,12 @@ LL calcBinOperation(char operation, LL i1, LL i2){
         case '*':
             return i1 * i2;
         case '%':
-            if (i2 == 0){
-                perror("Деление на ноль запрещено");
-                return -1;
-            }
             return i1 % i2;
         case '&':
-            if (i1 < 0 || i2 < 0){
-                perror("Операнды для побитовой операции должны быть неотрицательным");
-                return -1;
-            }
             return i1 & i2;
         case '|':
-            if (i1 < 0 || i2 < 0){
-                perror("Операнды для побитовой операции должны быть неотрицательным");
-                return -1;
-            }
             return i1 | i2;
         case '^':
-            if (i1 < 0 || i2 < 0){
-                perror("Операнды для побитовой операции должны быть неотрицательным");
-                return -1;
-            }
             return i1 ^ i2;
         default:
             return -1;
