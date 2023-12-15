@@ -31,11 +31,10 @@ bool isValid(char *str, enum numSystem SYS){
         
         case BIN:
             for (size_t i = offset; i < strlen(str); i++){
-                if ((int)str[i]<48 || (int)str[i]>49) {
+                if ((int)str[i]<48 || (int)str[i]>49) {// 48 - десятичное значение "0" в ASCII таблице
                         goto notValid;
                     }
             }
-            break;
 
         case OCT:
             for (size_t i = 1 + offset; i < strlen(str); i++){
@@ -43,15 +42,13 @@ bool isValid(char *str, enum numSystem SYS){
                             goto notValid;
                         }
                 }
-            break;
 
         case HEX:
             for (size_t i = 2 + offset; i < strlen(str); i++){
-                    if ( (int)str[i]<48 || (((int)str[i]>57 && (int)str[i]<97)) || (int)str[i]>102) {
+                    if ( (int)str[i]<48 || (((int)str[i]>57 && (int)str[i]<97)) || (int)str[i]>102) {// 97 - десятичное значение "a" в ASCII таблице
                             goto notValid;
                         }
                 }
-            break;  
 
         default:
             break;
@@ -87,25 +84,27 @@ enum numSystem getSystem(char *num){
 }
 
 void printResult(Number n){
+
     printf("\nResult ");
     if (n.sign == -1){
         printf("-");
         n.iNum = abs(n.iNum) * -1;
     }
-    switch (n.nSys)
-    {
-    case HEX:
-        printf("0x%s (%d)\n", n.num, n.iNum);
-        break;
-    case OCT:
-        printf("0%s (%d)\n", n.num, n.iNum);
-        break;
-    case BIN:
-        printf("%s (%d)\n", n.num, n.iNum);
-        break;
+
+    switch (n.nSys){
     
-    default:
-        break;
+        case HEX:
+            printf("0x%s (%d)\n", n.num, n.iNum);
+            break;
+        case OCT:
+            printf("0%s (%d)\n", n.num, n.iNum);
+            break;
+        case BIN:
+            printf("%s (%d)\n", n.num, n.iNum);
+            break;
+        default:
+            break;
+
     }
     return;
 }
@@ -117,7 +116,8 @@ void parseInput(char *buf){
     tokens[1] = NULL;
     tokens[2] = NULL;
     char *pch = strtok(buf, " ");
-    int cnt = 0; 
+    int cnt = 0;
+
     while (pch != NULL){
         if (cnt==3){
             perror("Too much values");
@@ -126,101 +126,106 @@ void parseInput(char *buf){
         tokens[cnt++] = pch;
         pch = strtok(NULL, " ");
     }
+
     if (cnt == 0){
         perror("Empty string");
         goto End;
     }
-    switch (cnt)
-    {
-    Number N, n1, n2;
-    LL i1;
-    char op;
-    case 1:
-
-        if (tokens[0][0] != '~'){
-            fprintf(stderr, "Not enough values");
-            goto End;
-        }
-        op = getOperator(tokens[0]);
-        if (op == '0'){
-            goto End;
-        }
-
-        if (isValid(tokens[0] + 1 , getSystem(tokens[0] + 1) )){
-            n1 = parseNum(tokens[0] + 1);
-            i1 = calcUnoOperation(op, n1.iNum);
-            N.iNum = i1;
-            N.nSys = n1.nSys;
-            N.sign = (i1 < 0) ? -1: 1;
-            itos(i1, N.nSys, N.num);
-            printResult(N);
-            goto End;
-            }
     
-    case 2:
-        perror("Invalid number of arguments");
-        goto End;
+    switch (cnt){
+    
+        Number N, n1, n2;
+        LL i1;
+        char op;
+        case 1:
 
-        /*
-        if (tokens[0][0] != '~'){
-            fprintf(stderr, "Not enough values");
-            goto End;
-        }
-        op = getOperator(tokens[0]);
-        if (op == '0'){
-            goto End;
-        }
-        if (isValid(tokens[1] , getSystem(tokens[1]) )){
-            tokens[0][strlen(tokens[0])] = '\0';
-            n1 = parseNum(tokens[1]);
-
-            i1 = calcUnoOperation(op, n1.iNum);
-            
-            N.iNum = i1;
-            N.nSys = n1.nSys;
-            N.sign = (i1 < 0) ? -1: 1;
-            itos(i1, N.nSys, N.num);
-            printResult(N);
-            goto End;
-            }
-        goto End;
-    */
-    case 3:
-        op = getOperator(tokens[1]);
-        if (op == '0'){
-            goto End;
-        }
-        
-        if (isValid(tokens[0] , getSystem(tokens[0])) && isValid(tokens[2] , getSystem(tokens[2]))){
-            if (op == '~'){
-                perror("Too much values for ~ operation");
-                goto End;
-            }
-            tokens[0][strlen(tokens[0])] = '\0';
-            tokens[2][strlen(tokens[2])] = '\0';
-            n1 = parseNum(tokens[0]);
-            
-            n2 = parseNum(tokens[2]);
-            
-            if (n1.nSys != n2.nSys){
-                perror("Differnt num systems");
+            if (tokens[0][0] != '~'){
+                fprintf(stderr, "Not enough values");
                 goto End;
             }
 
-            i1 = calcBinOperation(op, n1.iNum, n2.iNum);
-            N.iNum = abs(i1);
-            N.nSys = n1.nSys;
-            N.sign = (i1 < 0) ? -1: 1;
-            itos(i1, N.nSys, N.num);
-            printResult(N);
+            op = getOperator(tokens[0]);
+            
+            if (op == '0'){
+                goto End;
+            }
+
+            if (isValid(tokens[0] + 1 , getSystem(tokens[0] + 1) )){
+                n1 = parseNum(tokens[0] + 1);
+                i1 = calcUnoOperation(op, n1.iNum);
+                N.iNum = i1;
+                N.nSys = n1.nSys;
+                N.sign = (i1 < 0) ? -1: 1;
+                itos(i1, N.nSys, N.num);
+                printResult(N);
+                goto End;
+                }
+        
+        case 2:
+
+            perror("Invalid number of arguments");
+            goto End;
+
+            /*
+            if (tokens[0][0] != '~'){
+                fprintf(stderr, "Not enough values");
+                goto End;
+            }
+            op = getOperator(tokens[0]);
+            if (op == '0'){
+                goto End;
+            }
+            if (isValid(tokens[1] , getSystem(tokens[1]) )){
+                tokens[0][strlen(tokens[0])] = '\0';
+                n1 = parseNum(tokens[1]);
+
+                i1 = calcUnoOperation(op, n1.iNum);
+                
+                N.iNum = i1;
+                N.nSys = n1.nSys;
+                N.sign = (i1 < 0) ? -1: 1;
+                itos(i1, N.nSys, N.num);
+                printResult(N);
+                goto End;
+                }
+            goto End;
+        */
+        case 3:
+
+            op = getOperator(tokens[1]);
+            if (op == '0'){
+                goto End;
+            }
+            
+            if (isValid(tokens[0] , getSystem(tokens[0])) && isValid(tokens[2] , getSystem(tokens[2]))){
+                if (op == '~'){
+                    perror("Too much values for ~ operation");
+                    goto End;
+                }
+
+                tokens[0][strlen(tokens[0])] = '\0';
+                tokens[2][strlen(tokens[2])] = '\0';
+
+                n1 = parseNum(tokens[0]);
+                n2 = parseNum(tokens[2]);
+                
+                if (n1.nSys != n2.nSys){
+                    perror("Differnt num systems");
+                    goto End;
+                }
+
+                i1 = calcBinOperation(op, n1.iNum, n2.iNum);
+                N.iNum = abs(i1);
+                N.nSys = n1.nSys;
+                N.sign = (i1 < 0) ? -1: 1;
+                itos(i1, N.nSys, N.num);
+                printResult(N);
+                goto End;
+            }
+            
+        default:
             goto End;
         }
-        goto End;
-        
-    default:
-        goto End;
-    }
-
     End:
         free(tokens);
         return;
@@ -243,19 +248,17 @@ Number parseNum(char *str){
     n.nSys = getSystem(str);
     isValid(str, n.nSys);    
     n.iNum = stoi(str, n.nSys, n.sign);
-    switch (n.nSys)
-    {
-    case HEX:
-        offset += 2;
-        break;
-    case OCT:
-        offset += 1;
-        break;
-    default:
-        break;
+    switch (n.nSys){
+        case HEX:
+            offset += 2;
+            break;
+        case OCT:
+            offset += 1;
+            break;
+        default:
+            break;
     }
     strcpy(n.num, str+offset);
-    //printf("num  = %s\n", n.num);
     return n;
 }
 
@@ -299,15 +302,11 @@ char itoc(int i, enum numSystem Sys){
         else {
             return (char)(i + 87);
         }
-        break;
     case BIN:
         return (char)(i + 48);
-        break;
     case OCT:
         return (char)(i+48);
-        break;
     default:
-        break;
     }
     perror("Неизвестная система исчисления");
     return -1;
@@ -324,17 +323,18 @@ void reverseStr(char *str){
 }
 
 char *itos(LL i, enum numSystem Sys, char *dest){
+
     if (i == 0){
         strcpy(dest, "0\0");
-
         return "0\0";
     }
+
     int size = 128;
     char *str = malloc(size*sizeof(char));
-    
     int len = 0;
     int isNegative = i < 0 ? 1:0;
     i = abs(i);
+
     while (i > 0){
         str[len++] = itoc((i % Sys), Sys);
         if (len + 1 == size){
@@ -342,7 +342,6 @@ char *itos(LL i, enum numSystem Sys, char *dest){
             size *= 2;
             if (tmp == NULL){
                 perror("Не удалось выделить память");
-                
                 return "0\0";
             }
             str = tmp;
@@ -352,7 +351,6 @@ char *itos(LL i, enum numSystem Sys, char *dest){
     }
     
     str[len++] = '\0';
-    
     reverseStr(str);
     str[len] = '\0';
     strcpy(dest, str);
