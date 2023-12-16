@@ -86,6 +86,9 @@ enum numSystem getSystem(char *num){
     if (num == NULL){
         perror("NULL string");
     }
+    if (strlen(num) == 1 && num[0] == '0'){
+        return BIN;
+    }
     if (num[0] == '-'){
         offset = 1;
     }
@@ -329,6 +332,7 @@ char itoc(int i, enum numSystem Sys){
     case OCT:
         return (char)(i+48);
     default:
+        return -1;
     }
     perror("Неизвестная система исчисления");
     return -1;
