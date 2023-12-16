@@ -5,7 +5,7 @@
 
 LL calcUnoOperation(char operation, LL i1){
     if (operation != '~'){
-        perror("Неизвестная унарная операция");
+        fprintf(stderr,"Неизвестная унарная операция");
         return -1;
     }
     return ~i1;

@@ -15,7 +15,7 @@ char getOperator(char *str){
             }
         }
     }
-    perror("No valid operator");
+    fprintf(stderr, "No valid operator");
     return '0';
 }
 bool isBitOp(char op){
@@ -30,11 +30,11 @@ bool isBitOp(char op){
 
 bool validateOp(char op, LL i1, LL i2){
     if (isBitOp(op) && ((i1 < 0) || (i2 < 0))){
-        perror("Both numbers should be non negative");
+        fprintf(stderr,"Both numbers should be non negative");
         return false;
     }
     if (op == '%' && (i2 == 0)){
-        perror("Division by zero");
+        fprintf(stderr,"Division by zero");
         return false;
     }
     return true;
@@ -84,7 +84,7 @@ bool isValid(char *str, enum numSystem SYS){
 enum numSystem getSystem(char *num){ 
     int offset = 0;
     if (num == NULL){
-        perror("NULL string");
+        fprintf(stderr,"NULL string");
     }
     if (strlen(num) == 1 && num[0] == '0'){
         return BIN;
@@ -144,7 +144,7 @@ void parseInput(char *buf){
 
     while (pch != NULL){
         if (cnt==3){
-            perror("Too much values");
+            fprintf(stderr,"Too much values");
             goto End;
         }
         tokens[cnt++] = pch;
@@ -152,7 +152,7 @@ void parseInput(char *buf){
     }
 
     if (cnt == 0){
-        perror("Empty string");
+        fprintf(stderr,"Empty string");
         goto End;
     }
 
@@ -187,7 +187,7 @@ void parseInput(char *buf){
         
         case 2:
 
-            perror("Invalid number of arguments");
+            fprintf(stderr,"Invalid number of arguments");
             goto End;
 
             /*
@@ -223,7 +223,7 @@ void parseInput(char *buf){
             
             if (isValid(tokens[0] , getSystem(tokens[0])) && isValid(tokens[2] , getSystem(tokens[2]))){
                 if (op == '~'){
-                    perror("Too much values for ~ operation");
+                    fprintf(stderr,"Too much values for ~ operation");
                     goto End;
                 }
 
@@ -234,7 +234,7 @@ void parseInput(char *buf){
                 n2 = parseNum(tokens[2]);
                 
                 if (n1.nSys != n2.nSys){
-                    perror("Differnt num systems");
+                    fprintf(stderr,"Differnt num systems");
                     goto End;
                 }
                 if (validateOp(op, n1.iNum, n2.iNum)){
@@ -261,7 +261,7 @@ Number parseNum(char *str){
     size_t len = strlen(str);
     int offset = 0;
     if (str == NULL){
-        perror("NULL string");
+        fprintf(stderr,"NULL string");
     }
     if (str[0] == '-'){
         n.sign = -1;
@@ -334,7 +334,7 @@ char itoc(int i, enum numSystem Sys){
     default:
         return -1;
     }
-    perror("Неизвестная система исчисления");
+    fprintf(stderr,"Неизвестная система исчисления");
     return -1;
 }
 
@@ -367,7 +367,7 @@ char *itos(LL i, enum numSystem Sys, char *dest){
             char *tmp = realloc(str, size*2);
             size *= 2;
             if (tmp == NULL){
-                perror("Не удалось выделить память");
+                fprintf(stderr,"Не удалось выделить память");
                 return "0\0";
             }
             str = tmp;

@@ -18,7 +18,7 @@ int main(int argc, char const *argv[]){
             char *tmp = realloc(buf, bufsize*2*sizeof(char));
             bufsize *= 2;
             if (tmp == NULL){
-                perror("Not enough memory");
+                fprintf(stderr,"Not enough memory");
                 return -1;
             }
             buf = tmp;
