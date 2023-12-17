@@ -8,14 +8,16 @@
 
 char getOperator(char *str){
     char Ops[] = {'+', '-', '*', '%' ,'&', '|', '^', '~'};
-    for (size_t i = 0; i < strlen(str); i++){
-        for (size_t j = 0; j < 8; j++){
-            if (str[i] == Ops[j]){
-                return Ops[j];
+    if (!strlen(str) > 1){
+        for (size_t i = 0; i < strlen(str); i++){
+            for (size_t j = 0; j < 8; j++){
+                if (str[i] == Ops[j]){
+                    return Ops[j];
+                }
             }
         }
     }
-    fprintf(stderr, "No valid operator");
+    fprintf(stderr, "%s is not a valid operator", str);
     return '0';
 }
 bool isBitOp(char op){
